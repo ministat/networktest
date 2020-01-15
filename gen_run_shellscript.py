@@ -34,6 +34,7 @@ def gen_script(input, bench):
           ip=line.strip()
           iplist.append(ip)
       assert len(iplist) % 2 == 0, "IP list number must be even"
+      random.shuffle(iplist) # shuffle the ip to construct random send<->recv pairs
       for i,ip in enumerate(iplist):
           if (i%2 != 0):
              func="{bench_name}_bench".format(bench_name=bench)
