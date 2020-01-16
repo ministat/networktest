@@ -1,17 +1,19 @@
+# -*- coding: utf-8 -*-
 import argparse
 import subprocess
 import sys
 
-def distribute_app(input):
+def gen_big_file0(serverIp):
+   remoteCmd = subprocess.Popen(['ssh','b_carmel@{ip}'.format(ip=serverIp),'dd if=/dev/urandom of=bigfile bs=64M count=32'])
+   remoteCmd.wait()
+
+def gen_big_file(input):
    with open(input, 'r') as f:
       for i,line in enumerate(f):
           if (line.isspace()):
              continue
           ip=line.strip()
-          killBgCmd = subprocess.Popen(['ssh','b_carmel@{}'.format(ip),'killall netserver; killall ntttcp'])
-          killBgCmd.wait()
-          remoteCmd = subprocess.Popen(['scp','netserver','netperf','ntttcp','b_carmel@{}:~/'.format(ip)])
-          remoteCmd.wait()
+          gen_big_file0(ip)
 
 if __name__=="__main__":
    parser = argparse.ArgumentParser()
@@ -20,4 +22,4 @@ if __name__=="__main__":
    if args.input is None:
       print("No input file")
    else:
-      distribute_app(args.input)
+      gen_big_file(args.input)
